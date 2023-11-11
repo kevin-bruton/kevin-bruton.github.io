@@ -1,0 +1,71 @@
+INSTALL WINDOWS
+
+In the VPS control panel, select rescue system - > Debian - Live
+The VPS will reboot into the rescue mode
+Connect to the VPS via VNC
+Once connected, open a terminal and write:
+sudo su
+apt update
+apt upgrade -y
+apt install gparted filezilla grub2 wintools -y
+gparted
+
+in the GParted partition editor graphical interface, delete all existing partitions and then create two new ones, each of 25000 mgs, and leave the rest of the space as unallocated space. Set the type of file system to ntfs then apply the changes and exit to the terminal
+gdisk /dev/sda
+
+This terminal utility accepts commands. Run the corresponding commands sequentially: “r”, “g”, “p”, “w”, “y”
+After that, run:
+mount /dev/sda1 /mnt
+cd
+mkdir windisk
+mount /dev/sda2 windisk
+grub-install --root-directory=/mnt /dev/sda
+
+Open the grub configuration file with
+nano grub.cfg
+
+Insert this configuration in the file:
+menuentry "windows installer" {
+insmod ntfs
+search --set=root --file=/bootmgr
+ntldr /bootmgr
+boot
+}
+
+Save the file then change directory:
+cd /root/windisk
+
+Create a new directory inside the windisk directory:
+mkdir winfile
+	
+Download the windows ISO file:
+wget -O win10.iso https://auto.sensibleinvesting.com.au/Win10.iso
+
+Mount and copy the ISO:
+mount -o loop win10.iso winfile
+rsync -avz --progress winfile/* /mnt
+umount winfile
+
+Download Virtio Drivers
+wget -O virtio.iso https://bit.ly/tsvirtio
+mount -o loop virtio.iso winfile
+mkdir /mnt/sources/virtio
+rsync -avz --progress winfile/* /mnt/sources/virtio
+cd /mnt/sources
+touch cmd.txt
+echo 'add virtio /virtio_drivers' >> cmd.txt
+Wimlib-imagex update boot.wim 2 < cmd.txt
+
+Reboot the system:
+reboot
+
+When the system reboots into Windows, you will be prompted to provide the drivers. Choose Boot(X:)/virtio_drivers/amd64/ directory and then select your operating system (Win10).
+After downloading and competing the initial step, proceed to add the drivers for the network and PCI device. During the installation, specify the Boot(X:)/virtio_drivers folder and enable “search in subfolders” option by checking the corresponding box.
+
+ALLOW REMOTE CONNECTION
+To allow remote connections on a Windows 10:
+Right-click on the Start button and select “Settings”.
+In the Settings window, click on “System”.
+In the left sidebar, scroll down and click on “Remote Desktop”.
+Toggle the switch to “On” under the “Enable Remote Desktop” section.
+A warning message about making your device discoverable on the network may appear. Click on “Confirm” to proceed.
