@@ -21,10 +21,15 @@ apt upgrade -y
 apt install gparted filezilla grub2 wimtools -y
 gparted
 
-in the GParted partition editor graphical interface, delete all existing partitions and then create two new ones, each of 25000 mgs, and leave the rest of the space as unallocated space. Set the type of file system to ntfs then apply the changes and exit to the terminal
+In the GParted partition editor graphical interface,
+delete all existing partitions and then create two new ones,
+each of 25000 mgs, and leave the rest of the space as unallocated space.
+Set the type of file system to ntfs then apply the changes.
+Exit to the terminal and type:
 gdisk /dev/sda
 
-This terminal utility accepts commands. Run the corresponding commands sequentially: “r”, “g”, “p”, “w”, “y”
+This terminal utility accepts commands.
+Run the corresponding commands sequentially: “r”, “g”, “p”, “w”, “y”
 After that, run:
 mount /dev/sda1 /mnt
 cd
@@ -71,8 +76,15 @@ wimlib-imagex update boot.wim 2 < cmd.txt
 Reboot the system:
 reboot
 
-When the system reboots into Windows, you will be prompted to provide the drivers. Choose Boot(X:)/virtio_drivers/amd64/ directory and then select your operating system (Win10).
-After downloading and competing the initial step, proceed to add the drivers for the network and PCI device. During the installation, specify the Boot(X:)/virtio_drivers folder and enable “search in subfolders” option by checking the corresponding box.
+When the system reboots into Windows, you will be prompted to provide the drivers.
+Choose Boot(X:)/virtio_drivers/amd64/ directory
+and then select 2K 16.
+Select default options... Custom install Windows only etc...
+and configure your Windows...
+Enable internet in Device Management
+-> ethernet controller (right click)
+-> update driver software -> browse
+-> Select D:\sources\virtio
 
 ALLOW REMOTE CONNECTION
 To allow remote connections on a Windows 10:
@@ -80,5 +92,16 @@ Right-click on the Start button and select “Settings”.
 In the Settings window, click on “System”.
 In the left sidebar, scroll down and click on “Remote Desktop”.
 Toggle the switch to “On” under the “Enable Remote Desktop” section.
-A warning message about making your device discoverable on the network may appear. Click on “Confirm” to proceed.
+A warning message about making your device discoverable on the network may appear.
+Click on “Confirm” to proceed.
+
+ENABLE SSH (FOR SFTP AS WELL)
+Settings -> Apps -> Optional Features
+If its not already installed, select "Add a feature",
+find OpenSSH Server, then select install
+find OpenSSH Client, then select install
+Go to Services desktop app, select "automatic" and "start"
+for the OpenSSH SSH Server.
+Do the same with the OpenSSH Authentication Agent service.
+
 </pre>
