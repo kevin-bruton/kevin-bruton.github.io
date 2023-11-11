@@ -16,7 +16,7 @@ deb http://security.debian.org/debian-security/ buster/updates main contrib non-
 	
 apt update
 apt upgrade -y
-apt install gparted filezilla grub2 wintools -y
+apt install gparted filezilla grub2 wimtools -y
 gparted
 
 in the GParted partition editor graphical interface, delete all existing partitions and then create two new ones, each of 25000 mgs, and leave the rest of the space as unallocated space. Set the type of file system to ntfs then apply the changes and exit to the terminal
