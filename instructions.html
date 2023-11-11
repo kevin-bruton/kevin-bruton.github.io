@@ -29,6 +29,7 @@ cd
 mkdir windisk
 mount /dev/sda2 windisk
 grub-install --root-directory=/mnt /dev/sda
+cd /mnt/boot/grub
 
 Open the grub configuration file with
 nano grub.cfg
